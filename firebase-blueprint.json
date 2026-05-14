@@ -1,0 +1,58 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "User profile information",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "email": { "type": "string" },
+        "displayName": { "type": "string" },
+        "photoURL": { "type": "string" },
+        "role": { "type": "string", "enum": ["user", "admin"] },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["uid", "email", "role"]
+    },
+    "Turf": {
+      "title": "Turf",
+      "description": "A sports turf available for booking",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "location": { "type": "string" },
+        "sports": { "type": "array", "items": { "type": "string" } },
+        "description": { "type": "string" },
+        "pricePerHour": { "type": "number" },
+        "imageUrls": { "type": "array", "items": { "type": "string" } },
+        "amenities": { "type": "array", "items": { "type": "string" } },
+        "rating": { "type": "number" }
+      },
+      "required": ["name", "location", "sports", "pricePerHour"]
+    },
+    "Booking": {
+      "title": "Booking",
+      "description": "A turf booking record",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "userId": { "type": "string" },
+        "turfId": { "type": "string" },
+        "turfName": { "type": "string" },
+        "sport": { "type": "string" },
+        "startTime": { "type": "string", "format": "date-time" },
+        "endTime": { "type": "string", "format": "date-time" },
+        "totalPrice": { "type": "number" },
+        "status": { "type": "string", "enum": ["confirmed", "cancelled"] },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "turfId", "startTime", "endTime", "totalPrice", "status"]
+    }
+  },
+  "firestore": {
+    "users": { "schema": "User", "description": "Collection of users" },
+    "turfs": { "schema": "Turf", "description": "Collection of available sports turfs" },
+    "bookings": { "schema": "Booking", "description": "Collection of turf bookings" }
+  }
+}
