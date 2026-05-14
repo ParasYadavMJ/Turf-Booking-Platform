@@ -191,7 +191,7 @@ const HeroSlideshow = ({ turfs, onSelectTurf }: { turfs: Turf[], onSelectTurf?: 
   const current = slides[index];
 
   return (
-    <section className="relative h-[60vh] md:h-[70vh] w-full mt-24 mb-16 rounded-[2rem] overflow-hidden border border-white/5">
+    <section className="relative h-[60vh] md:h-[70vh] w-full mt-4 mb-4 rounded-[2rem] overflow-hidden border border-white/5">
       <AnimatePresence mode="wait">
         <motion.div
           key={current.id}
@@ -416,6 +416,35 @@ const TurfDetail = ({ turf, user, onBack, onBookingSuccess, onLogin }: { turf: T
 
   const [selectedImage, setSelectedImage] = useState(turf.imageUrls[0]);
   const [showBookingModal, setShowBookingModal] = useState(false);
+  const [selectedDates, setSelectedDates] = useState<number[]>([]);
+  const [selectedTimeSlotsByDate, setSelectedTimeSlotsByDate] = useState<Record<number, string[]>>({});
+  const [openDropdownDate, setOpenDropdownDate] = useState<number | null>(null);
+
+  const hasValidBooking = selectedDates.length > 0 && selectedDates.every(date => (selectedTimeSlotsByDate[date] || []).length > 0);
+
+  const januaryDays = Array.from({ length: 31 }, (_, i) => i + 1);
+  const startDayOffset = Array.from({ length: 3 }, (_, i) => i); // Offset for Jan 1st (Wednesday)
+  const weekDays = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
+
+  const timeSlots = [
+    { time: "06:00 AM", available: true },
+    { time: "07:00 AM", available: false },
+    { time: "08:00 AM", available: true },
+    { time: "09:00 AM", available: true },
+    { time: "10:00 AM", available: true },
+    { time: "11:00 AM", available: false },
+    { time: "12:00 PM", available: true },
+    { time: "01:00 PM", available: true },
+    { time: "02:00 PM", available: false },
+    { time: "03:00 PM", available: true },
+    { time: "04:00 PM", available: true },
+    { time: "05:00 PM", available: false },
+    { time: "06:00 PM", available: true },
+    { time: "07:00 PM", available: false },
+    { time: "08:00 PM", available: true },
+    { time: "09:00 PM", available: true },
+    { time: "10:00 PM", available: true },
+  ];
 
   return (
     <motion.div
@@ -475,6 +504,101 @@ const TurfDetail = ({ turf, user, onBack, onBookingSuccess, onLogin }: { turf: T
             </div>
           </div>
 
+          {/* Calendar & Time Selection */}
+          <div className="bg-surface border border-white/10 rounded-2xl p-6">
+            <h3 className="text-xl font-bold mb-4 font-display">Select Dates (January)</h3>
+            
+            <div className="grid grid-cols-7 gap-2 mb-6">
+              {weekDays.map(day => (
+                <div key={day} className="text-center text-xs font-bold text-white/40 tracking-wider">
+                  {day}
+                </div>
+              ))}
+              {startDayOffset.map(i => (
+                <div key={`empty-${i}`} className="h-8 sm:h-10"></div>
+              ))}
+              {januaryDays.map(day => (
+                <button
+                  key={day}
+                  onClick={() => {
+                    setSelectedDates(prev => 
+                      prev.includes(day) ? prev.filter(d => d !== day) : [...prev, day]
+                    );
+                  }}
+                  className={`h-8 sm:h-10 flex items-center justify-center rounded-full text-sm font-bold transition-all ${
+                    selectedDates.includes(day) 
+                      ? 'bg-brand text-dark scale-110 shadow-[0_0_15px_rgba(0,255,0,0.4)]' 
+                      : 'text-white/70 hover:bg-white/10 hover:text-white'
+                  }`}
+                >
+                  {day}
+                </button>
+              ))}
+            </div>
+
+            {selectedDates.length > 0 && (
+              <motion.div 
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                className="pt-6 border-t border-white/10 space-y-6"
+              >
+                {[...selectedDates].sort((a,b) => a-b).map(date => (
+                  <div key={date}>
+                    <h3 className="text-xl font-bold mb-4 font-display">Select Time Slot for {date} Jan</h3>
+                    <div className="relative">
+                      <div 
+                        onClick={() => setOpenDropdownDate(openDropdownDate === date ? null : date)}
+                        className="w-full bg-dark border border-brand/30 rounded-xl px-4 py-3 text-brand font-bold focus:outline-none focus:border-brand transition-colors cursor-pointer flex justify-between items-center"
+                      >
+                        <span className="truncate pr-4">
+                          {(selectedTimeSlotsByDate[date] || []).length > 0 
+                            ? selectedTimeSlotsByDate[date].join(', ') 
+                            : 'Choose 1-hr intervals...'}
+                        </span>
+                        <ChevronDown className={`w-5 h-5 transition-transform ${openDropdownDate === date ? 'rotate-180' : ''}`} />
+                      </div>
+                      
+                      {openDropdownDate === date && (
+                        <div className="mt-2 w-full bg-dark border border-brand/30 rounded-xl max-h-60 overflow-y-auto shadow-2xl">
+                          {timeSlots.map(slot => {
+                            const isSelected = (selectedTimeSlotsByDate[date] || []).includes(slot.time);
+                            return (
+                              <button
+                                key={slot.time}
+                                disabled={!slot.available}
+                                onClick={() => {
+                                  setSelectedTimeSlotsByDate(prev => {
+                                    const currentSlots = prev[date] || [];
+                                    return {
+                                      ...prev,
+                                      [date]: isSelected 
+                                        ? currentSlots.filter(t => t !== slot.time)
+                                        : [...currentSlots, slot.time]
+                                    };
+                                  });
+                                }}
+                                className={`w-full text-left px-4 py-3 font-bold transition-colors flex items-center justify-between ${
+                                  !slot.available 
+                                    ? 'text-brand/30 bg-dark/50 cursor-not-allowed' 
+                                    : isSelected
+                                      ? 'bg-brand/20 text-brand'
+                                      : 'text-brand hover:bg-white/5'
+                                }`}
+                              >
+                                <span>{slot.time} {!slot.available && '(Booked)'}</span>
+                                {isSelected && <Check className="w-5 h-5 text-brand" />}
+                              </button>
+                            );
+                          })}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </motion.div>
+            )}
+          </div>
+
           <div className="flex flex-col sm:flex-row sm:items-center justify-between p-6 bg-surface border border-white/10 rounded-2xl gap-4">
             <div>
               <div className="text-xs text-white/40 mb-1 uppercase tracking-widest font-bold">Standard Rate</div>
@@ -487,13 +611,18 @@ const TurfDetail = ({ turf, user, onBack, onBookingSuccess, onLogin }: { turf: T
               </div>
             </div>
             <button 
+              disabled={!hasValidBooking}
               onClick={() => {
                 if (user) setShowBookingModal(true);
                 else onLogin();
               }}
-              className="w-full sm:w-auto whitespace-nowrap bg-brand text-dark px-10 py-4 rounded-2xl font-bold text-lg hover:scale-105 active:scale-95 transition-all shadow-[0_0_30px_rgba(0,255,0,0.2)] text-center flex-shrink-0"
+              className={`w-full sm:w-auto whitespace-nowrap px-10 py-4 rounded-2xl font-bold text-lg text-center flex-shrink-0 transition-all ${
+                hasValidBooking
+                  ? "bg-brand text-dark hover:scale-105 active:scale-95 shadow-[0_0_30px_rgba(0,255,0,0.2)]"
+                  : "bg-white/10 text-white/30 cursor-not-allowed"
+              }`}
             >
-              Book This Pitch
+              Book Turf
             </button>
           </div>
 
@@ -812,7 +941,7 @@ const CricketLoader = () => (
   </div>
 );
 
-const TurfCard = ({ turf, onClick }: { turf: Turf, onClick: () => void }) => (
+const TurfCard = ({ turf, onClick, key }: { turf: Turf, onClick: () => void, key?: string | number }) => (
   <motion.div 
     layout
     initial={{ opacity: 0, y: 20 }}
@@ -1200,19 +1329,21 @@ export default function App() {
             exit={{ opacity: 0 }}
             className="max-w-7xl mx-auto"
           >
+            {/* Discover Header */}
+            <header className="mb-4 pt-2">
+              <h1 className="font-display tracking-tight flex flex-col">
+                <span className="text-xl sm:text-2xl md:text-3xl font-bold text-white mb-2">FIND YOUR</span>
+                <span className="text-brand text-4xl sm:text-5xl md:text-7xl font-bold leading-none whitespace-nowrap">PERFECT PITCH.</span>
+              </h1>
+            </header>
+
             <HeroSlideshow turfs={turfs} onSelectTurf={(t) => { setSelectedTurf(t); setView('detail'); }} />
 
-            {/* Discover Header */}
-            <header className="mb-12">
-              <h1 className="font-display text-5xl md:text-7xl font-bold tracking-tight mb-4">
-                FIND YOUR <br />
-                <span className="text-brand">PERFECT PITCH.</span>
-              </h1>
-              <div className="flex flex-col md:flex-row gap-4 items-start md:items-center">
-                 <div className="relative flex-1 w-full max-w-xl">
-                   <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-white/30" />
-                   <input 
-                    type="text" 
+            <div className="mb-8 flex flex-col md:flex-row gap-4 items-start md:items-center mt-8">
+               <div className="relative flex-1 w-full max-w-xl">
+                 <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-white/30" />
+                 <input 
+                  type="text" 
                     placeholder="Search by location or sport (e.g. Football)" 
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
@@ -1240,9 +1371,8 @@ export default function App() {
                     </button>
                  </div>
               </div>
-            </header>
 
-            <div className="flex flex-col lg:flex-row gap-12">
+            <div className="flex flex-col lg:flex-row gap-8">
               {/* Desktop Filter Sidebar */}
               <div className="hidden lg:block">
                 <FilterSidebar 
