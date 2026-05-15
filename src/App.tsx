@@ -421,7 +421,7 @@ const TurfDetail = ({ turf, user, onBack, onBookingSuccess, onLogin }: { turf: T
   const [openDropdownDate, setOpenDropdownDate] = useState<number | null>(null);
 
   const hasValidBooking = selectedDates.length > 0 && selectedDates.every(date => (selectedTimeSlotsByDate[date] || []).length > 0);
-  const totalSlotsSelected = Object.values(selectedTimeSlotsByDate).reduce((acc, curr) => acc + curr.length, 0);
+  const totalSlotsSelected: number = Object.values(selectedTimeSlotsByDate).reduce((acc: number, curr: string[]) => acc + curr.length, 0) as number;
 
   const januaryDays = Array.from({ length: 31 }, (_, i) => i + 1);
   const startDayOffset = Array.from({ length: 3 }, (_, i) => i); // Offset for Jan 1st (Wednesday)
@@ -894,59 +894,75 @@ const Footer = ({ setView }: { setView: (v: string) => void }) => (
   </footer>
 );
 
-const CricketLoader = () => (
-  <div className="relative w-32 h-32 flex items-center justify-center">
-    {/* Ball */}
+const SportsLoader = () => (
+  <div className="relative w-32 h-32 flex items-center justify-center overflow-hidden">
+    {/* Cricket */}
     <motion.div 
-      className="absolute w-4 h-4 bg-red-600 rounded-full shadow-[0_0_15px_rgba(220,38,38,0.5)] z-20"
+      className="absolute flex items-center justify-center gap-3"
       animate={{ 
-        x: [-60, 20, 150],
-        y: [0, 0, -20],
-        opacity: [0, 1, 0],
-        scale: [0.8, 1, 1.2]
+        y: [60, -10, 60, 60, 60, 60],
+        opacity: [0, 1, 0, 0, 0, 0],
+        rotate: [45, 0, -45, -45, -45, -45]
       }}
       transition={{ 
-        duration: 1.5, 
+        duration: 3, 
         repeat: Infinity, 
-        times: [0, 0.4, 1],
-        ease: "easeOut" 
-      }}
-    />
-    
-    {/* Bat */}
-    <motion.div 
-      className="relative w-3 h-16 bg-[#D2B48C] rounded-sm origin-top"
-      animate={{ 
-        rotate: [0, -45, 90, 0]
-      }}
-      transition={{ 
-        duration: 1.5, 
-        repeat: Infinity, 
-        times: [0, 0.2, 0.4, 1],
-        ease: "easeInOut"
+        times: [0, 0.166, 0.333, 0.334, 0.666, 1],
+        ease: "easeIn"
       }}
     >
-      {/* Handle */}
-      <div className="absolute -top-6 left-0 w-full h-6 bg-black rounded-t-full border-b border-white/20" />
-      {/* Bat Texture Overlay */}
-      <div className="absolute inset-0 bg-gradient-to-r from-black/10 to-transparent" />
+      <div className="relative w-4 h-16 bg-brand rounded-sm shadow-[0_0_15px_rgba(34,197,94,0.3)]">
+        <div className="absolute -top-5 left-1/2 -translate-x-1/2 w-2 h-5 bg-brand rounded-t-sm" />
+      </div>
+      <div className="w-5 h-5 bg-brand rounded-full shadow-[0_0_15px_rgba(34,197,94,0.6)]" />
     </motion.div>
 
-    {/* Impact Effect */}
+    {/* Football */}
     <motion.div 
-      className="absolute w-8 h-8 rounded-full border-2 border-brand"
-      initial={{ scale: 0, opacity: 0 }}
+      className="absolute flex items-center justify-center"
       animate={{ 
-        scale: [0, 2],
-        opacity: [0, 0.5, 0]
+        y: [60, 60, -10, 60, 60, 60],
+        opacity: [0, 0, 1, 0, 0, 0],
+        rotate: [0, 0, 180, 360, 360, 360]
       }}
       transition={{ 
-        duration: 1.5, 
+        duration: 3, 
         repeat: Infinity, 
-        at: 0.4, // Match impact timing
-        times: [0, 0.4, 0.6]
+        times: [0, 0.333, 0.5, 0.666, 0.667, 1],
+        ease: "easeIn"
       }}
-    />
+    >
+      <div className="w-14 h-14 rounded-full border-[3px] border-brand flex items-center justify-center relative overflow-hidden bg-brand/20 shadow-[0_0_15px_rgba(34,197,94,0.4)]">
+        <div className="w-7 h-7 border-[3px] border-brand rounded-full absolute" />
+        <div className="w-[3px] h-full bg-brand absolute rotate-45" />
+        <div className="w-[3px] h-full bg-brand absolute -rotate-45" />
+      </div>
+    </motion.div>
+
+    {/* Tennis */}
+    <motion.div 
+      className="absolute flex items-center justify-center gap-3"
+      animate={{ 
+        y: [60, 60, 60, -10, 60, 60],
+        opacity: [0, 0, 0, 1, 0, 0],
+        rotate: [-45, -45, -45, 0, 45, 45]
+      }}
+      transition={{ 
+        duration: 3, 
+        repeat: Infinity, 
+        times: [0, 0.333, 0.666, 0.833, 1, 1],
+        ease: "easeIn"
+      }}
+    >
+      <div className="flex flex-col items-center shadow-[0_0_15px_rgba(34,197,94,0.2)] rounded-full">
+        <div className="w-10 h-12 rounded-[50%] border-[3px] border-brand bg-brand/20" style={{ backgroundImage: 'repeating-linear-gradient(45deg, transparent, transparent 2px, rgba(34,197,94,0.5) 2px, rgba(34,197,94,0.5) 4px), repeating-linear-gradient(-45deg, transparent, transparent 2px, rgba(34,197,94,0.5) 2px, rgba(34,197,94,0.5) 4px)' }} />
+        <div className="w-2 h-7 bg-brand rounded-b-sm" />
+      </div>
+      <div className="w-5 h-5 bg-brand rounded-full shadow-[0_0_15px_rgba(34,197,94,0.6)] relative overflow-hidden">
+        <div className="absolute -top-1 w-6 h-4 border-b-2 border-dark rounded-[50%]" />
+        <div className="absolute -bottom-1 w-6 h-4 border-t-2 border-dark rounded-[50%]" />
+      </div>
+    </motion.div>
   </div>
 );
 
@@ -1306,7 +1322,7 @@ export default function App() {
 
   if (loading) return (
     <div className="h-screen w-full flex flex-col items-center justify-center gap-8 bg-dark">
-      <CricketLoader />
+      <SportsLoader />
       <div className="flex flex-col items-center gap-2">
         <div className="font-display font-bold tracking-[0.2em] text-sm text-brand uppercase italic">
           Preparing the ground
