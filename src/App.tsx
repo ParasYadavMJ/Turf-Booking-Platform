@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { 
   Trophy, 
@@ -421,6 +421,7 @@ const TurfDetail = ({ turf, user, onBack, onBookingSuccess, onLogin }: { turf: T
   const [openDropdownDate, setOpenDropdownDate] = useState<number | null>(null);
 
   const hasValidBooking = selectedDates.length > 0 && selectedDates.every(date => (selectedTimeSlotsByDate[date] || []).length > 0);
+  const totalSlotsSelected = Object.values(selectedTimeSlotsByDate).reduce((acc, curr) => acc + curr.length, 0);
 
   const januaryDays = Array.from({ length: 31 }, (_, i) => i + 1);
   const startDayOffset = Array.from({ length: 3 }, (_, i) => i); // Offset for Jan 1st (Wednesday)
@@ -497,7 +498,13 @@ const TurfDetail = ({ turf, user, onBack, onBookingSuccess, onLogin }: { turf: T
                 {turf.rating}
               </div>
             </div>
-            <h1 className="font-display text-4xl md:text-5xl font-bold mb-2">{turf.name}</h1>
+            <div className="flex items-start justify-between">
+              <h1 className="font-display text-4xl md:text-5xl font-bold mb-2">{turf.name}</h1>
+              <div className="flex flex-col items-end">
+                <span className="text-lg font-mono font-bold text-white/40 line-through decoration-red-500">₹{turf.originalPrice || turf.pricePerHour + 400}</span>
+                <span className="text-2xl font-mono font-bold text-brand">₹{turf.pricePerHour}</span>
+              </div>
+            </div>
             <div className="flex items-center gap-2 text-white/40">
               <MapPin className="w-4 h-4" />
               {turf.location}
@@ -548,7 +555,9 @@ const TurfDetail = ({ turf, user, onBack, onBookingSuccess, onLogin }: { turf: T
                     <div className="relative">
                       <div 
                         onClick={() => setOpenDropdownDate(openDropdownDate === date ? null : date)}
-                        className="w-full bg-dark border border-brand/30 rounded-xl px-4 py-3 text-brand font-bold focus:outline-none focus:border-brand transition-colors cursor-pointer flex justify-between items-center"
+                        className={`w-full bg-dark border border-brand/30 rounded-xl px-4 py-3 font-bold focus:outline-none focus:border-brand transition-colors cursor-pointer flex justify-between items-center ${
+                          (selectedTimeSlotsByDate[date] || []).length > 0 ? 'text-brand' : 'text-black'
+                        }`}
                       >
                         <span className="truncate pr-4">
                           {(selectedTimeSlotsByDate[date] || []).length > 0 
@@ -579,10 +588,10 @@ const TurfDetail = ({ turf, user, onBack, onBookingSuccess, onLogin }: { turf: T
                                 }}
                                 className={`w-full text-left px-4 py-3 font-bold transition-colors flex items-center justify-between ${
                                   !slot.available 
-                                    ? 'text-brand/30 bg-dark/50 cursor-not-allowed' 
+                                    ? 'text-black/30 bg-dark/50 cursor-not-allowed' 
                                     : isSelected
                                       ? 'bg-brand/20 text-brand'
-                                      : 'text-brand hover:bg-white/5'
+                                      : 'text-black hover:bg-white/5'
                                 }`}
                               >
                                 <span>{slot.time} {!slot.available && '(Booked)'}</span>
@@ -603,10 +612,10 @@ const TurfDetail = ({ turf, user, onBack, onBookingSuccess, onLogin }: { turf: T
             <div>
               <div className="text-xs text-white/40 mb-1 uppercase tracking-widest font-bold">Standard Rate</div>
               <div className="flex flex-row items-baseline gap-3">
-                <span className="text-2xl font-mono font-bold text-white/40 line-through decoration-red-500 w-fit">₹{turf.originalPrice || turf.pricePerHour + 400}</span>
+                <span className="text-2xl font-mono font-bold text-white/40 line-through decoration-red-500 w-fit">₹{(turf.originalPrice || turf.pricePerHour + 400) * Math.max(1, totalSlotsSelected)}</span>
                 <div className="flex items-baseline gap-1">
-                  <span className="text-4xl font-mono font-bold text-brand">₹{turf.pricePerHour}</span>
-                  <span className="text-white/40 text-sm">/ hour</span>
+                  <span className="text-4xl font-mono font-bold text-brand">₹{turf.pricePerHour * Math.max(1, totalSlotsSelected)}</span>
+                  {totalSlotsSelected === 0 && <span className="text-white/40 text-sm">/ hour</span>}
                 </div>
               </div>
             </div>
@@ -941,7 +950,7 @@ const CricketLoader = () => (
   </div>
 );
 
-const TurfCard = ({ turf, onClick, key }: { turf: Turf, onClick: () => void, key?: string | number }) => (
+const TurfCard: React.FC<{ turf: Turf, onClick: () => void }> = ({ turf, onClick }) => (
   <motion.div 
     layout
     initial={{ opacity: 0, y: 20 }}
