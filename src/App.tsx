@@ -608,13 +608,13 @@ const TurfDetail = ({ turf, user, onBack, onBookingSuccess, onLogin }: { turf: T
             )}
           </div>
 
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between p-6 bg-surface border border-white/10 rounded-2xl gap-4">
-            <div>
-              <div className="text-xs text-white/40 mb-1 uppercase tracking-widest font-bold">Standard Rate</div>
-              <div className="flex flex-row items-baseline gap-3">
-                <span className="text-2xl font-mono font-bold text-white/40 line-through decoration-red-500 w-fit">₹{(turf.originalPrice || turf.pricePerHour + 400) * Math.max(1, totalSlotsSelected)}</span>
+          <div className="flex flex-col items-center justify-center p-6 bg-surface border border-white/10 rounded-2xl gap-6">
+            <div className="flex flex-col items-center text-center">
+              <div className="text-sm text-white/40 mb-2 uppercase tracking-widest font-bold">Amount payable</div>
+              <div className="flex flex-row items-baseline justify-center gap-3">
+                <span className="text-2xl sm:text-3xl font-mono font-bold text-white/40 line-through decoration-red-500">₹{(turf.originalPrice || turf.pricePerHour + 400) * Math.max(1, totalSlotsSelected)}</span>
                 <div className="flex items-baseline gap-1">
-                  <span className="text-4xl font-mono font-bold text-brand">₹{turf.pricePerHour * Math.max(1, totalSlotsSelected)}</span>
+                  <span className="text-4xl sm:text-5xl font-mono font-bold text-brand">₹{turf.pricePerHour * Math.max(1, totalSlotsSelected)}</span>
                   {totalSlotsSelected === 0 && <span className="text-white/40 text-sm">/ hour</span>}
                 </div>
               </div>
@@ -625,7 +625,7 @@ const TurfDetail = ({ turf, user, onBack, onBookingSuccess, onLogin }: { turf: T
                 if (user) setShowBookingModal(true);
                 else onLogin();
               }}
-              className={`w-full sm:w-auto whitespace-nowrap px-10 py-4 rounded-2xl font-bold text-lg text-center flex-shrink-0 transition-all ${
+              className={`w-full sm:w-auto px-12 py-4 rounded-2xl font-bold text-lg text-center transition-all ${
                 hasValidBooking
                   ? "bg-brand text-dark hover:scale-105 active:scale-95 shadow-[0_0_30px_rgba(0,255,0,0.2)]"
                   : "bg-white/10 text-white/30 cursor-not-allowed"
