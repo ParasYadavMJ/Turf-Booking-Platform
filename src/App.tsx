@@ -816,9 +816,11 @@ const FoundersSection = () => (
           bio: "Ex-tech lead and cricket enthusiast obsessed with seamless user experiences."
         }
       ].map((founder, i) => (
-        <div key={i} className="flex items-center gap-6 p-6 bg-white/5 border border-white/5 rounded-3xl">
-          <img src={founder.img} alt={founder.name} className="w-24 h-24 rounded-2xl object-cover grayscale" />
-          <div>
+        <div key={i} className="flex items-stretch bg-white/5 border border-white/5 rounded-3xl overflow-hidden">
+          <div className="w-1/3 min-w-[120px] max-w-[160px] flex-shrink-0">
+            <img src={founder.img} alt={founder.name} className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-500" />
+          </div>
+          <div className="p-6 flex flex-col justify-center">
             <h4 className="font-bold text-lg mb-1">{founder.name}</h4>
             <div className="text-brand text-xs font-mono mb-2">{founder.role}</div>
             <p className="text-xs text-white/50 leading-relaxed italic">"{founder.bio}"</p>
@@ -1355,19 +1357,56 @@ export default function App() {
             className="max-w-7xl mx-auto"
           >
             {/* Discover Header */}
-            <header className="relative mb-8 h-[40vh] min-h-[300px] flex items-center justify-center overflow-hidden rounded-3xl group">
-              <div className="absolute inset-0 z-0">
-                <img 
-                  src="https://images.unsplash.com/photo-1540747913346-19e32dc3e97e?q=80&w=2000&auto=format&fit=crop" 
-                  alt="Sports Pitch Collage"
-                  className="w-full h-full object-cover opacity-30 group-hover:scale-110 transition-transform duration-[20s] ease-out"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-dark via-dark/20 to-dark/40" />
+            <header className="mb-16 pt-8 flex flex-col md:flex-row items-center justify-between gap-12 min-h-[50vh]">
+              {/* Text side - aligned left */}
+              <div className="flex-1 w-full text-left">
+                <h1 className="font-display tracking-tight flex flex-col items-start">
+                  <span className="text-sm sm:text-lg md:text-xl font-bold text-white/80 mb-2 drop-shadow-xl uppercase tracking-[0.2em] ml-1">FIND YOUR</span>
+                  <span className="text-brand font-bold leading-[0.9] -ml-1 drop-shadow-[0_0_30px_rgba(34,197,94,0.3)] text-[4.5rem] sm:text-[5.5rem] md:text-[6.5rem]">
+                    <span className="block">PERFECT</span>
+                    <span className="block">PITCH.</span>
+                  </span>
+                </h1>
               </div>
-              <h1 className="relative z-10 font-display tracking-tight flex flex-col items-center text-center px-4">
-                <span className="text-xl sm:text-2xl md:text-3xl font-bold text-white mb-2 drop-shadow-2xl">FIND YOUR</span>
-                <span className="text-brand text-xl sm:text-2xl md:text-3xl font-bold leading-none whitespace-nowrap drop-shadow-[0_0_30px_rgba(34,197,94,0.3)]">PERFECT PITCH.</span>
-              </h1>
+
+              {/* Collage side - aligned right */}
+              <div className="w-full md:w-1/2 h-[500px] relative mt-8 md:mt-0 flex-shrink-0 perspective-1000">
+                  {/* Image 1 - Football */}
+                  <motion.div 
+                    initial={{ opacity: 0, y: 30, rotate: -6 }}
+                    animate={{ opacity: 1, y: 0, rotate: -6, x: 0 }}
+                    whileHover={{ scale: 1.05, rotate: -2, zIndex: 40 }}
+                    transition={{ duration: 0.7, ease: "easeOut" }}
+                    className="absolute top-[5%] md:right-[40%] right-[30%] w-[45%] md:w-[220px] h-[280px] rounded-[2rem] overflow-hidden shadow-2xl border-4 border-dark z-20"
+                  >
+                    <img src="https://images.unsplash.com/photo-1518605368461-1e122221f559?q=80&w=800&auto=format&fit=crop" className="w-full h-full object-cover" alt="Football pitch" />
+                    <div className="absolute inset-0 bg-brand/10 hover:bg-transparent transition-colors" />
+                  </motion.div>
+                  
+                  {/* Image 2 - Tennis */}
+                  <motion.div 
+                    initial={{ opacity: 0, x: 30, rotate: 8 }}
+                    animate={{ opacity: 1, x: 0, rotate: 8 }}
+                    whileHover={{ scale: 1.05, rotate: 4, zIndex: 40 }}
+                    transition={{ duration: 0.7, delay: 0.2, ease: "easeOut" }}
+                    className="absolute top-[15%] right-[5%] w-[40%] md:w-[200px] h-[240px] rounded-[2rem] overflow-hidden shadow-2xl border-4 border-dark z-10"
+                  >
+                    <img src="https://images.unsplash.com/photo-1595435934249-5df7ed86e1c0?q=80&w=800&auto=format&fit=crop" className="w-full h-full object-cover" alt="Tennis court" />
+                    <div className="absolute inset-0 bg-blue-500/10 hover:bg-transparent transition-colors" />
+                  </motion.div>
+
+                  {/* Image 3 - Basketball / Padel */}
+                  <motion.div 
+                    initial={{ opacity: 0, y: -30, rotate: -12 }}
+                    animate={{ opacity: 1, y: 0, rotate: -12 }}
+                    whileHover={{ scale: 1.05, rotate: -6, zIndex: 40 }}
+                    transition={{ duration: 0.7, delay: 0.4, ease: "easeOut" }}
+                    className="absolute bottom-[10%] md:right-[20%] right-[10%] w-[50%] md:w-[260px] h-[200px] rounded-[2rem] overflow-hidden shadow-2xl border-4 border-dark z-30"
+                  >
+                    <img src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=800&auto=format&fit=crop" className="w-full h-full object-cover" alt="Basketball court" />
+                    <div className="absolute inset-0 bg-yellow-500/10 hover:bg-transparent transition-colors" />
+                  </motion.div>
+              </div>
             </header>
 
             <HeroSlideshow turfs={turfs} onSelectTurf={(t) => { setSelectedTurf(t); setView('detail'); }} />
