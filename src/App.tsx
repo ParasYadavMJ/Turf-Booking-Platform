@@ -1358,7 +1358,7 @@ export default function App() {
               <div className="flex-1 w-full text-left">
                 <h1 className="font-display tracking-tight flex flex-col items-start">
                   <span className="text-sm sm:text-lg md:text-xl font-bold text-white/80 mb-2 drop-shadow-xl uppercase tracking-[0.2em] ml-1">FIND YOUR</span>
-                  <span className="text-brand font-bold leading-[0.9] -ml-1 drop-shadow-[0_0_30px_rgba(34,197,94,0.3)] text-[4.5rem] sm:text-[5.5rem] md:text-[6.5rem]">
+                  <span className="text-brand font-bold leading-[0.9] -ml-1 drop-shadow-[0_0_30px_rgba(34,197,94,0.3)] text-[2.7rem] sm:text-[3.3rem] md:text-[3.9rem]">
                     <span className="block">PERFECT</span>
                     <span className="block">PITCH.</span>
                   </span>
