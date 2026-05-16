@@ -1235,12 +1235,8 @@ export default function App() {
       const init = async () => {
         const path = 'turfs';
         try {
-          let snapshot = await getDocs(collection(db, path));
-          if (snapshot.empty) {
-            // Only attempt seeding if empty, and expect possible permission error if not logged in
-            await seedTurfs().catch(e => console.warn("Seeding skipped or failed:", e.message));
-            snapshot = await getDocs(collection(db, path));
-          }
+          await seedTurfs().catch(e => console.warn("Seeding skipped or failed:", e.message));
+          const snapshot = await getDocs(collection(db, path));
           
           if (snapshot.empty) {
              const localTurfs = INITIAL_TURFS.map((t, i) => ({ id: `local-${i}`, ...t }));
