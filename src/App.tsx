@@ -191,7 +191,7 @@ const HeroSlideshow = ({ turfs, onSelectTurf }: { turfs: Turf[], onSelectTurf?: 
   const current = slides[index];
 
   return (
-    <section className="relative h-[60vh] md:h-[70vh] w-full mt-4 mb-4 rounded-[2rem] overflow-hidden border border-white/5">
+    <section className="relative h-[75vh] md:h-[85vh] w-full mt-4 mb-4 rounded-[2rem] overflow-hidden border border-white/5">
       <AnimatePresence mode="wait">
         <motion.div
           key={current.id}
@@ -975,7 +975,7 @@ const TurfCard: React.FC<{ turf: Turf, onClick: () => void }> = ({ turf, onClick
     className="bg-surface border border-white/10 rounded-2xl overflow-hidden cursor-pointer group"
     onClick={onClick}
   >
-    <div className="relative h-48 overflow-hidden">
+    <div className="relative h-64 overflow-hidden">
       <img 
         src={turf.imageUrls[0]} 
         alt={turf.name} 
@@ -996,7 +996,7 @@ const TurfCard: React.FC<{ turf: Turf, onClick: () => void }> = ({ turf, onClick
       </div>
     </div>
     <div className="p-5">
-      <h3 className="font-display text-xl font-bold mb-1">{turf.name}</h3>
+      <h3 className="font-display text-sm font-bold mb-1">{turf.name}</h3>
       <div className="flex items-center gap-1 text-white/60 text-sm mb-4">
         <MapPin className="w-4 h-4" />
         {turf.location}
@@ -1355,10 +1355,18 @@ export default function App() {
             className="max-w-7xl mx-auto"
           >
             {/* Discover Header */}
-            <header className="mb-4 pt-2">
-              <h1 className="font-display tracking-tight flex flex-col">
-                <span className="text-xl sm:text-2xl md:text-3xl font-bold text-white mb-2">FIND YOUR</span>
-                <span className="text-brand text-4xl sm:text-5xl md:text-7xl font-bold leading-none whitespace-nowrap">PERFECT PITCH.</span>
+            <header className="relative mb-8 h-[40vh] min-h-[300px] flex items-center justify-center overflow-hidden rounded-3xl group">
+              <div className="absolute inset-0 z-0">
+                <img 
+                  src="https://images.unsplash.com/photo-1540747913346-19e32dc3e97e?q=80&w=2000&auto=format&fit=crop" 
+                  alt="Sports Pitch Collage"
+                  className="w-full h-full object-cover opacity-30 group-hover:scale-110 transition-transform duration-[20s] ease-out"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-dark via-dark/20 to-dark/40" />
+              </div>
+              <h1 className="relative z-10 font-display tracking-tight flex flex-col items-center text-center px-4">
+                <span className="text-xl sm:text-2xl md:text-3xl font-bold text-white mb-2 drop-shadow-2xl">FIND YOUR</span>
+                <span className="text-brand text-xl sm:text-2xl md:text-3xl font-bold leading-none whitespace-nowrap drop-shadow-[0_0_30px_rgba(34,197,94,0.3)]">PERFECT PITCH.</span>
               </h1>
             </header>
 
