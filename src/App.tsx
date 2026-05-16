@@ -1355,7 +1355,7 @@ export default function App() {
             {/* Discover Header */}
             <header className="mb-16 pt-8 flex flex-col md:flex-row items-center justify-between gap-12 min-h-[50vh]">
               {/* Text side - aligned left */}
-              <div className="flex-1 w-full text-left">
+              <div className="flex-1 w-full text-left md:pl-8 lg:pl-16">
                 <h1 className="font-display tracking-tight flex flex-col items-start">
                   <span className="text-sm sm:text-lg md:text-xl font-bold text-white/80 mb-2 drop-shadow-xl uppercase tracking-[0.2em] ml-1">FIND YOUR</span>
                   <span className="text-brand font-bold leading-[0.9] -ml-1 drop-shadow-[0_0_30px_rgba(34,197,94,0.3)] text-[2.7rem] sm:text-[3.3rem] md:text-[3.9rem]">
@@ -1366,16 +1366,16 @@ export default function App() {
               </div>
 
               {/* Collage side - aligned right */}
-              <div className="w-full md:w-1/2 h-[500px] relative mt-8 md:mt-0 flex-shrink-0 perspective-1000">
+              <div className="w-full md:w-1/2 h-[500px] relative mt-8 md:mt-0 flex-shrink-0 perspective-1000 md:-ml-8 lg:-ml-16">
                   {/* Image 1 - Football */}
                   <motion.div 
                     initial={{ opacity: 0, y: 30, rotate: -6 }}
                     animate={{ opacity: 1, y: 0, rotate: -6, x: 0 }}
                     whileHover={{ scale: 1.05, rotate: -2, zIndex: 40 }}
                     transition={{ duration: 0.7, ease: "easeOut" }}
-                    className="absolute top-[5%] md:right-[40%] right-[30%] w-[45%] md:w-[220px] h-[280px] rounded-[2rem] overflow-hidden shadow-2xl border-4 border-dark z-20"
+                    className="absolute top-[5%] md:right-[50%] right-[30%] w-[45%] md:w-[220px] h-[280px] rounded-[2rem] overflow-hidden shadow-2xl border-4 border-dark z-20"
                   >
-                    <img src="https://images.unsplash.com/photo-1518605368461-1e122221f559?q=80&w=800&auto=format&fit=crop" className="w-full h-full object-cover" alt="Football pitch" />
+                    <img src="https://images.unsplash.com/photo-1551958219-acbc608c6377?q=80&w=800&auto=format&fit=crop" className="w-full h-full object-cover" alt="Football pitch" />
                     <div className="absolute inset-0 bg-brand/10 hover:bg-transparent transition-colors" />
                   </motion.div>
                   
@@ -1385,7 +1385,7 @@ export default function App() {
                     animate={{ opacity: 1, x: 0, rotate: 8 }}
                     whileHover={{ scale: 1.05, rotate: 4, zIndex: 40 }}
                     transition={{ duration: 0.7, delay: 0.2, ease: "easeOut" }}
-                    className="absolute top-[15%] right-[5%] w-[40%] md:w-[200px] h-[240px] rounded-[2rem] overflow-hidden shadow-2xl border-4 border-dark z-10"
+                    className="absolute top-[15%] md:right-[20%] right-[5%] w-[40%] md:w-[200px] h-[240px] rounded-[2rem] overflow-hidden shadow-2xl border-4 border-dark z-10"
                   >
                     <img src="https://images.unsplash.com/photo-1595435934249-5df7ed86e1c0?q=80&w=800&auto=format&fit=crop" className="w-full h-full object-cover" alt="Tennis court" />
                     <div className="absolute inset-0 bg-blue-500/10 hover:bg-transparent transition-colors" />
@@ -1397,7 +1397,7 @@ export default function App() {
                     animate={{ opacity: 1, y: 0, rotate: -12 }}
                     whileHover={{ scale: 1.05, rotate: -6, zIndex: 40 }}
                     transition={{ duration: 0.7, delay: 0.4, ease: "easeOut" }}
-                    className="absolute bottom-[10%] md:right-[20%] right-[10%] w-[50%] md:w-[260px] h-[200px] rounded-[2rem] overflow-hidden shadow-2xl border-4 border-dark z-30"
+                    className="absolute bottom-[10%] md:right-[35%] right-[10%] w-[50%] md:w-[260px] h-[200px] rounded-[2rem] overflow-hidden shadow-2xl border-4 border-dark z-30"
                   >
                     <img src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=800&auto=format&fit=crop" className="w-full h-full object-cover" alt="Basketball court" />
                     <div className="absolute inset-0 bg-yellow-500/10 hover:bg-transparent transition-colors" />
